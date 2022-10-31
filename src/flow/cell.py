@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Created on Mon Sep 16 15:14:39 2019
 
@@ -25,9 +23,8 @@ This is the flow class
 import numpy as np
 import math
 
-
 class Cell:
-    
+
     def __init__(self, rowindex, colindex, dem_ng, cellsize, flux, z_delta, parent, alpha, exp, flux_threshold, max_z_delta, startcell):
         '''This class handles the spreading over the DEM!
         Depending on the process different alpha angles are used for energy dissipation.'''
@@ -51,11 +48,11 @@ class Cell:
         self.max_distance = 0
         self.min_gamma = 0
         self.max_gamma = 0
-        self.sl_gamma = 0             
+        self.sl_gamma = 0
 
         if type(startcell) == bool:  # check, if start cell exist (start cell is release point)
             self.is_start = True  # set is_start to True
-        else:            
+        else:
             self.startcell = startcell  # give startcell to cell
             self.is_start = False  # set is_start to False
 
@@ -96,11 +93,11 @@ class Cell:
         self.z_delta_neighbour = self.z_delta + self.z_gamma - self.z_alpha
         self.z_delta_neighbour[self.z_delta_neighbour < 0] = 0
         self.z_delta_neighbour[self.z_delta_neighbour > self.max_z_delta] = self.max_z_delta
-           
+
     def calc_tanbeta(self):
         ds = np.array([[np.sqrt(2), 1, np.sqrt(2)], [1, 1, 1], [np.sqrt(2), 1, np.sqrt(2)]])
         distance = ds * self.cellsize
-        
+
         beta = np.arctan((self.altitude - self.dem_ng) / distance) + np.deg2rad(90)
         self.tan_beta = np.tan(beta/2)
 
@@ -118,11 +115,11 @@ class Cell:
             self.persistence += 1
         else:
             for parent in self.parent:
-                dx = (parent.colindex - self.colindex) 
+                dx = (parent.colindex - self.colindex)
                 dy = (parent.rowindex - self.rowindex)
 
                 self.no_flow[dy + 1,dx + 1] = 0  # 3x3 Matrix of ones, every parent gets a 0, so no flow to a parent field.
-                
+
                 maxweight = parent.z_delta
                 # Old Calculation
                 if dx == -1:
@@ -162,15 +159,15 @@ class Cell:
                         self.persistence[0, 0] += maxweight
                         self.persistence[0, 1] += 0.707 * maxweight
                         self.persistence[1, 0] += 0.707 * maxweight
-                        
+
 # =============================================================================
 #                 # New Calculation:
 #                 theta_child = np.array([[np.pi*5/4, np.pi*3/2 , np.pi*7/4], [np.pi, 0, 0], [np.pi*3/4, np.pi/2 , np.pi/4]])
 #                 theta_parent = (np.arctan2(dy, dx))
-#                 
+#
 #                 pers1 = theta_parent - theta_child - np.pi
 #                 pers = np.zeros((3,3))
-#                 
+#
 #                 for idx, element in np.ndenumerate(pers1):
 #                     pers[idx] = max(0, np.cos(element))
 #                     if pers[idx] < 2*np.finfo(np.float64).eps:
@@ -178,7 +175,7 @@ class Cell:
 #                 pers[1, 1] = 0
 #                 self.persistence += pers * maxweight
 # =============================================================================
-                    
+
     def calc_distribution(self):
 
         self.calc_z_delta()

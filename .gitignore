@@ -36,5 +36,10 @@
 *.rar
 *.tar
 *.zip
+*.egg-info
 /examples/Arzler/
 /examples/Oberammergau/
+
+# Python #
+##########
+.venv
