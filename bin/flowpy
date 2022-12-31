@@ -1,0 +1,226 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+CLI for Flow-Py
+"""
+from logging import getLogger as logger
+
+# cli
+from flow.args import cli
+
+# logging
+from flow.log import initialize
+
+_logger = "flowpy.main"
+
+
+def main():
+
+    # initialize the logger
+    initialize()
+
+    # retrieve logging instance
+    # -------------------------------------------------------------------------------------
+    log = logger(_logger)
+
+    # parse command line arguments using std lib argparse
+    args = cli()
+
+    print(args)
+    # common positional arguments (required)
+    # -----------------------------------------------------------------------
+    src: str = args.src
+    dst: str = args.dst
+
+    log.debug("common required args: (src='%s', dst=%s)", src, dst)
+
+    # optional flags
+    # -----------------------------------------------------------------------
+    cwd: str = args.cwd
+    dry_run: bool = args.dry_run
+
+    log.debug("common optional args: (cwd='%s', dry_run='%s')", cwd, dry_run)
+
+    # For "partition" sub-command
+    # --
+
+    # For "release" sub-command
+    # alpha: float = args.alpha
+    # exp: float = args.exp
+    # # optional flags
+    # infra: str = args.infra
+    # flux_threshold: float = args.flux
+    # max_z: int = args.max_z
+
+    log.debug("starting...")
+
+    # start = datetime.now().replace(microsecond=0)
+    # timestamp = start.strftime(_time_fmt)
+
+    # # the logical current working directory
+    # cwd: Path = Path(cwd)
+
+    # # optional infrastructure for back calculation
+    # infra_path = Path(infra)
+    # infra_bool = infra_path.exists()
+
+    # # Create result directory
+    # res_dir = cwd.joinpath(f"res_{timestamp}")
+    # res_dir.mkdir(parents=True, exist_ok=True)
+
+    # # make temp directory
+    # # todo use python std lib style maybe
+    # temp_dir = res_dir.joinpath("temp")
+    # temp_dir.mkdir(parents=True, exist_ok=True)
+
+    # logging.warn(
+    #     f"""
+    # Start Calculation
+    # Alpha Angle: {alpha}
+    # Exponent: {exp}
+    # Flux Threshold: {flux_threshold}
+    # Max Z_delta: {max_z}
+    # """
+    # )
+
+    # try:
+    #     dem, header = read_raster(dem_path)
+    #     logging.info(f"DEM File: {dem_path}")
+    # except FileNotFoundError:
+    #     logging.error(f"{dem_path} not found")
+    #     sys.exit(1)
+
+    # try:
+    #     release, release_header = read_raster(release_path)
+    #     logging.info("Release File: {release_path}")
+    # except FileNotFoundError:
+    #     logging.error(f"{release_path} not found")
+    #     sys.exit(1)
+
+    # # TODO validation step
+    # # Check if Layers have same size!!!
+    # if (
+    #     header["ncols"] == release_header["ncols"]
+    #     and header["nrows"] == release_header["nrows"]
+    # ):
+    #     logging.info("DEM and Release Layer ok!")
+    # else:
+    #     logging.error(f"Error: Release Layer doesn't match DEM!")
+    #     sys.exit(1)
+
+    # del dem, release
+
+    # logging.info("Files read in")
+
+    # cellsize = header["cellsize"]
+    # nodata = header["noDataValue"]
+    # tile_dim_col = int(15000 / cellsize)
+    # tile_dim_row = int(15000 / cellsize)
+
+    # # 5km overlap
+    # U = int(5000 / cellsize)
+
+    # logging.info("Start Tiling...")
+
+    # update(dem_path, "dem", temp_dir, tile_dim_col, tile_dim_row, U)
+    # create(release_path, "init", temp_dir, tile_dim_col, tile_dim_row, U)
+
+    # infra = np.zeros_like(dem)
+    # if infra_bool:
+    #     _, infra, infra_header = read_raster(infra_path)
+
+    #     if (
+    #         header["ncols"] == infra_header["ncols"]
+    #         and header["nrows"] == infra_header["nrows"]
+    #     ):
+    #         print("Infra Layer ok!")
+    #         infra_bool = True
+    #         logging.info("Infrastructure File: {}".format(infra_path))
+    #     else:
+    #         logging.error("Error: Infra Layer doesn't match DEM!")
+    #         sys.exit(1)
+
+    #     update(infra_path, "infra", temp_dir, tile_dim_col, tile_dim_row, U)
+
+    # print("Finished Tiling...")
+
+    # with open(temp_dir + "nTiles", "rb") as data:
+    #     n_tiles = pickle.load(data)
+
+    #     core_args: List[CoreArguments] = []
+    #     # das hier ist die batch-liste, die von mulitprocessing
+    #     # abgearbeitet werden muss - sieht so aus:
+    #     # [(0,0,alpha,exp,cellsize,-9999.),
+    #     # (0,1,alpha,exp,cellsize,-9999.),
+    #     # etc.]
+
+    #     for x in range(n_tiles[0] + 1):
+    #         for y in range(n_tiles[1] + 1):
+    #             core_args.append(
+    #                 (
+    #                     x,
+    #                     y,
+    #                     alpha,
+    #                     exp,
+    #                     cellsize,
+    #                     nodata,
+    #                     flux_threshold,
+    #                     max_z,
+    #                     temp_dir,
+    #                 )
+    #             )
+
+    #     # Calculation
+    #     logging.info("Multiprocessing starts, used cores: {}".format(cpu_count() - 1))
+    #     print(
+    #         "{} Processes started and {} calculations to perform.".format(
+    #             mp.cpu_count() - 1, len(core_args)
+    #         )
+    #     )
+    #     pool = mp.Pool(mp.cpu_count() - 1)
+
+    #     if infra_bool:
+    #         pool.map(calculation, core_args)
+    #     else:
+    #         pool.map(calculation_effect, core_args)
+
+    #     pool.close()
+    #     pool.join()
+
+    #     logging.info("Calculation finished, merging results.")
+
+    #     # Merge calculated tiles
+    #     z_delta = merge_tiles(temp_dir, "res_z_delta")
+    #     flux = merge_tiles(temp_dir, "res_flux")
+    #     cell_counts = merge_tiles(temp_dir, "res_count")
+    #     z_delta_sum = merge_tiles(temp_dir, "res_z_delta_sum")
+    #     fp_ta = merge_tiles(temp_dir, "res_fp")
+    #     sl_ta = merge_tiles(temp_dir, "res_sl")
+
+    #     if infra_bool:
+    #         backcalc = merge_tiles(temp_dir, "res_backcalc")
+
+    #     logging.info("Writing Output Files")
+
+    #     # todo, any other formats?
+    #     ext = ".tif"
+
+    #     save_raster(dem_path, cwd + res_dir + f"flux{ext}", flux)
+    #     save_raster(dem_path, cwd + res_dir + f"z_delta{ext}", z_delta)
+    #     save_raster(dem_path, cwd + res_dir + f"FP_travel_angle{ext}", fp_ta)
+    #     save_raster(dem_path, cwd + res_dir + f"SL_travel_angle{ext}", sl_ta)
+    #     if not infra_bool:  # if no infra
+    #         save_raster(dem_path, cwd + res_dir + f"cell_counts{ext}", cell_counts)
+    #         save_raster(dem_path, cwd + res_dir + f"z_delta_sum{ext}", z_delta_sum)
+    #     if infra_bool:  # if infra
+    #         save_raster(dem_path, cwd + res_dir + f"backcalculation{ext}", backcalc)
+
+    #     logging.info("Calculation finished")
+    #     logging.info("...")
+    #     end = datetime.now().replace(microsecond=0)
+    #     logging.info("Calculation needed: " + str(end - start) + " seconds")
+
+
+if __name__ == "__main__":
+    main()

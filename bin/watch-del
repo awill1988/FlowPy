@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# don't continue when there's an unexpected error or for undefined variables
+set -eu
+
+# to know where this script lives on the filesystem when it is run
+rootdir=$(cd "$(dirname "$0")/../"; pwd -P)
+
+# helper functions
+source ${rootdir}/bin/rc
+
+# verify: watchman & jq are installed
+type jq >/dev/null || die 'jq is not installed. Please install it.'
+type watchman >/dev/null || die 'watchman is not installed. See https://facebook.github.io/watchman/docs/install.html'
+
+# do nothing if already not watching
+already_installed=$(watchman watch-list | jq -c '[.roots[] | select(. | contains("'"${rootdir}"'"))] | length')
+
+[[ "0" -eq "${already_installed}" ]] && exit 0
+
+#--------------------------------------------------------------------
+#                         watchman(del)
+#--------------------------------------------------------------------
+#   stop watching the src directory for changes and remove watch
+#--------------------------------------------------------------------
+watchman watch-del "${rootdir}/src"

@@ -1,0 +1,44 @@
+{
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+        "**/__pycache__": true
+    },
+    "python.terminal.activateEnvironment": true,
+    "python.analysis.useLibraryCodeForTypes": true,
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv3.10/bin/python",
+    "python.analysis.extraPaths": [],
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.ignorePatterns": [],
+    "python.linting.cwd": "${workspaceFolder}",
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Path": "${workspaceFolder}/.venv3.10/bin/flake8",
+    "python.linting.flake8Args": ["--config", "${workspaceFolder}/setup.cfg"],
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyPath": "${workspaceFolder}/.venv3.10/bin/mypy",
+    "python.linting.mypyArgs": [
+        "--config-file",
+        "${workspaceFolder}/setup.cfg"
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintPath": "${workspaceFolder}/.venv3.10/bin/pylint",
+    "python.linting.pylintArgs": ["--rcfile", "${workspaceFolder}/.pylintrc"],
+
+    "python.analysis.autoSearchPaths": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "${workspaceFolder}/.venv3.10/bin/black",
+
+    "python.testing.autoTestDiscoverOnSaveEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.cwd": "${workspaceFolder}",
+    "python.testing.pytestArgs": [
+        "--no-cov"
+        // "--capture=no"
+    ],
+    "python.testing.pytestPath": "${workspaceFolder}/.venv3.10/bin/pytest"
+}

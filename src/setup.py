@@ -25,10 +25,11 @@ if sys.version_info < (3, 10):
 from pathlib import Path  # noqa
 
 # Change this to what you want your library code to be called!
-PACKAGE_NAME = "FlowPy"
+PACKAGE_NAME = "flow"
 
 # Path to the directory containing this file
 PYTHON_ROOT = Path(__file__).parent.absolute()
+
 # Relative path to this directory from cwd.
 FROM_TOP = PYTHON_ROOT.relative_to(Path.cwd())
 
@@ -36,7 +37,8 @@ FROM_TOP = PYTHON_ROOT.relative_to(Path.cwd())
 SRC_ROOT = PYTHON_ROOT.parents[1]
 
 # Not automatically updated!
-version = "0.0.0"
+version = "0.0.1"
+
 
 def parse_requirements(fname="requirements.txt", with_version=True):
     """Parse the package dependencies listed in a requirements file but strip
@@ -129,19 +131,21 @@ class InstallPlatlib(install):
 setup(
     name=PACKAGE_NAME,
     version=version,
-    description="FlowPy Library SDK",
+    description="Flow-Py Library SDK",
     classifiers=[
         "Intended Audience :: Developers",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: >=3.10",
     ],
-    install_requires=parse_requirements(FROM_TOP / 'requirements' / 'runtime.txt'),
+    install_requires=parse_requirements("requirements/runtime.txt"),
     keywords=f"{PACKAGE_NAME}",
     package_dir={
-        PACKAGE_NAME: FROM_TOP / 'src' / 'flow',
+        PACKAGE_NAME: FROM_TOP / "flow",
     },
+    package_data={PACKAGE_NAME: [str(FROM_TOP / "py.typed")]},
     include_package_data=True,
     distclass=BinaryDistribution,
     cmdclass={"install": InstallPlatlib},
+    scripts=["bin/flowpy"],
     zip_safe=True,
 )

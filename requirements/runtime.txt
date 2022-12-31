@@ -1,3 +1,5 @@
 numpy>=1.23
-GDAL>=3.5.1
+GDAL==3.5.2
 rasterio
+json_log_formatter
+mmh3

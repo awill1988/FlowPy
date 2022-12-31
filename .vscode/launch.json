@@ -1,0 +1,81 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flow-Py (help)",
+            "type": "python",
+            "request": "launch",
+            "module": "flowpy",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": ["help"],
+            "env": {},
+            "justMyCode": false
+        },
+        {
+            "name": "Test flow.args",
+            "args": ["src/tests/flow/args_test.py"],
+
+            "type": "python",
+            "request": "launch",
+            "purpose": ["debug-test"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTEST_ADDOPTS": "--no-cov --capture=no"
+            }
+        },
+        {
+            "name": "Test flow.memory",
+            "args": ["src/tests/flow/memory_test.py"],
+
+            "type": "python",
+            "request": "launch",
+            "purpose": ["debug-test"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTEST_ADDOPTS": "--no-cov --capture=no"
+            }
+        },
+        {
+            "name": "Test flow.hash",
+            "args": ["src/tests/flow/hash_test.py"],
+
+            "type": "python",
+            "request": "launch",
+            "purpose": ["debug-test"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTEST_ADDOPTS": "--no-cov --capture=no"
+            }
+        },
+        {
+            "name": "Test flow.log",
+            "args": ["src/tests/flow/log_test.py"],
+
+            "type": "python",
+            "request": "launch",
+            "purpose": ["debug-test"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTEST_ADDOPTS": "--no-cov --capture=no"
+            }
+        },
+        {
+            "name": "Test flow.settings",
+            "args": ["src/tests/flow/settings_test.py"],
+
+            "type": "python",
+            "request": "launch",
+            "purpose": ["debug-test"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTEST_ADDOPTS": "--no-cov --capture=no"
+            }
+        }
+    ]
+}

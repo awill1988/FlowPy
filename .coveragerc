@@ -1,0 +1,5 @@
+[run]
+source = src/flow
+
+[report]
+fail_under = 1
