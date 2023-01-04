@@ -116,10 +116,10 @@ jobs:
           prettier_options: --check **/*.{js,y[a]ml}
           only_changed: True
   # -----------------------------------------------------------------------------------------------
-  #                                    Package Publishing
+  #                                       Publishing
   # -----------------------------------------------------------------------------------------------
   publish-packages:
-    name: Publish Packages
+    name: publish
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -128,22 +128,22 @@ jobs:
           - build-target: develop
           - tag-name: develop
     steps:
-      - name: Fetch Source
+      - name: fetch source
         uses: actions/checkout@v3
 
-      - name: Set up QEMU
+      - name: setup qemu
         uses: docker/setup-qemu-action@v2
 
-      - name: Set up Docker Buildx
+      - name: set up docker buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: extract metadata (tags, labels)
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Build and push Docker images
+      - name: build and push docker images
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
