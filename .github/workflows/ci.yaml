@@ -1,7 +1,16 @@
-name: "FlowPy" # name of this github workflow
-run-name: > # name displayed on github
+# -------------------------------------------------------------------------------------------------
+#                                FlowPy CI Workflow
+# -------------------------------------------------------------------------------------------------
+name: "ci"
+
+# The name that is displayed on the github webpage when you drill in for details on Github Actions.
+# -------------------------------------------------------------------------------------------------
+run-name: >
   Continuous Integration for ${{ github.event.pull_request.title }} ${{ github.event.pull_request._links.html.href }}
 
+# -------------------------------------------------------------------------------------------------
+#                            Github Event Triggers & Automation
+# -------------------------------------------------------------------------------------------------
 on: # yamllint disable-line rule:truthy
   schedule:
     - cron: "28 0 * * *"
@@ -10,23 +19,37 @@ on: # yamllint disable-line rule:truthy
   pull_request:
     branches: ["develop", "master"]
 
-# Permissions required are read, not write.
+# -------------------------------------------------------------------------------------------------
+#                          Github Runner: Github API Permissions
+# -------------------------------------------------------------------------------------------------
 permissions:
   contents: read
   pull-requests: read
+  packages: write
 
-# System Environment variables that are inherited from Github
+# -------------------------------------------------------------------------------------------------
+#                         Github Runner: Environment Variables
+# -------------------------------------------------------------------------------------------------
 env:
-  GITHUB_REPOSITORY: ${{ github.repository }} # this repository
-  GITHUB_USERNAME: ${{ github.actor }} # the username
-  IMAGE_TAG: "${{ github.event.pull_request.head.sha || github.sha }}" # the short sha
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_USERNAME: ${{ github.actor }}
+  IMAGE_TAG: "${{ github.event.pull_request.head.sha || github.sha }}"
+  IMAGE_NAME: flowpy
+  REGISTRY: ghcr.io
 
-# ensures only distinct runs per PR
+# -------------------------------------------------------------------------------------------------
+#                                 Cooperative Constraints
+# -------------------------------------------------------------------------------------------------
+# Only one run per PR <- branch (last commit cancels previous)
+# -------------------------------------------------------------------------------------------------
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # -----------------------------------------------------------------------------------------------
+  #                               Github PR Context Extraction
+  # -----------------------------------------------------------------------------------------------
   build-info:
     timeout-minutes: 10
     name: "Build Info"
@@ -66,12 +89,14 @@ jobs:
               }
             }' --jq '.data.node.labels.nodes[]' | jq --slurp -c '[.[].name]' >> ${GITHUB_OUTPUT}
         if: github.event_name == 'pull_request_target'
-
-  lint_code:
+  # -----------------------------------------------------------------------------------------------
+  #                                      Code Quality
+  # -----------------------------------------------------------------------------------------------
+  lint-code:
     name: Lint Code
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Fetch Source
         uses: actions/checkout@v1
 
       - name: Run ShellCheck
@@ -90,3 +115,39 @@ jobs:
         with:
           prettier_options: --check **/*.{js,y[a]ml}
           only_changed: True
+  # -----------------------------------------------------------------------------------------------
+  #                                    Package Publishing
+  # -----------------------------------------------------------------------------------------------
+  publish-packages:
+    name: Publish Packages
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - build-target: develop
+          - tag-name: develop
+    steps:
+      - name: Fetch Source
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          target: ${{ matrix.build-target }}
