@@ -21,7 +21,7 @@ To automatically build on changes to Python files, you can add:
 make watch-add-python
 ```
 
-*See other required software in [DEVELOPMENT.md](./DEVELOPMENT.md)*
+_See other required software in [DEVELOPMENT.md](./DEVELOPMENT.md)_
 
 ## Running the Code
 
@@ -29,7 +29,7 @@ In order to run the code, you must install it on your system.
 
 `pip install .`
 
-*Note: This isn't the virtualenv `pip`, this is your system's `pip`*
+_Note: This isn't the virtualenv `pip`, this is your system's `pip`_
 
 The [setuptools script](src/setup.py) adds `./bin/flowpy` to your `PYTHONPATH` so you should
 under most circumstances be able to simply run:
@@ -44,7 +44,7 @@ The terminal version runs with the following arguments:
 - `--exp` (controls concentration of routing flux and therefore the lateral spread)
 - `--cwd` working directory path
 - URI to DEM raster
-- URI to release raster (.tiff or .asc)  
+- URI to release raster (.tiff or .asc)
 - (Optional) flux threshold (positive number) flux_threshold=xx (limits spreading with the exponent)
 - (Optional) Max Z<sup>&delta;</sup> (positive number) max_z_delta=xx (max kinetic energy height, turbulent friction)
 
@@ -144,7 +144,7 @@ tar xfz src/tests/data/infra.tar.gz -C src/tests/data
 
 ![Image](img/Motivation_2d.png)
 
-*Fig. 1: Definition of angles and geometric measures for the calculation of Z<sup>&delta;</sup>, where s is the projected distance along the path and z(s) the corresponding altitude.*
+_Fig. 1: Definition of angles and geometric measures for the calculation of Z<sup>&delta;</sup>, where s is the projected distance along the path and z(s) the corresponding altitude._
 
 The model equations that determine the run out in three dimensional terrain are mainly motivated with respect to simple, geometric, two dimensional concepts [0,3,4] in conjunction with ideas existing algorithms for flow routing in three dimensional terrain [1,2], controlling the main routing and final stopping of the flow.
 
@@ -174,13 +174,13 @@ The major drawback of implementing the geometric runout angle concepts is that t
 
 ## Spatial Input and Iterative Calculation Steps on the Path
 
-In nature a GMF has one or more release areas that span over single or multiple release cells. Flow-Py computes the so called path, which is defined as the spatial extent of the routing from each release cell. Each release area (single raster cell in release area  layer) has it's own unique path (collection of raster cells), and a location on the terrain (a single raster cell) can belong to many paths. Flow-Py identifies the path with spatial iterations starting with a release area raster cell and only iterating over cells which receive routing flux.  The corresponding functions are implemented in the code in the flow_class.calc_distribution() function.
+In nature a GMF has one or more release areas that span over single or multiple release cells. Flow-Py computes the so called path, which is defined as the spatial extent of the routing from each release cell. Each release area (single raster cell in release area layer) has it's own unique path (collection of raster cells), and a location on the terrain (a single raster cell) can belong to many paths. Flow-Py identifies the path with spatial iterations starting with a release area raster cell and only iterating over cells which receive routing flux. The corresponding functions are implemented in the code in the flow_class.calc_distribution() function.
 
 To route on the surface of the three dimensional terrain, operating on a quadrilateral grid, we implement the geometric concepts that have been sketched in the model motivation utilizing the following cell definitions:
 
 ​ ![grid_overview](img/Neighbours.png)
 
-*Fig. 2: Definition of parent, base, child and neighbors, as well as the indexing around the base.*
+_Fig. 2: Definition of parent, base, child and neighbors, as well as the indexing around the base._
 
 Each path calculation starts with a release cell and operates on the raster, requiring the definition of parent, base, child and neighbor cells (see Fig. 2).
 The base cell is the cell being calculated on the current spatial iteration step. The 8 raster cells surrounding the base cell are called neighbor cells (n, i) which have the potential to be parents (supplying flux to base cell), or a child (receive flux from the base cell).
@@ -201,7 +201,7 @@ Every path is independent from the other, but depending on the information we wa
 
 ### Z<sup>&delta;</sup>
 
-For each base cell in a path we solve the equations (6,7 and 8) for every neighbor n, if Z<sub>bn</sub><sup>&delta;</sup> is higher than zero, this neighbor is defined as a potential child of this base, and routing  in this direction is possible.
+For each base cell in a path we solve the equations (6,7 and 8) for every neighbor n, if Z<sub>bn</sub><sup>&delta;</sup> is higher than zero, this neighbor is defined as a potential child of this base, and routing in this direction is possible.
 
 ![z_delta_i](img/z_delta_array.png)
 
@@ -228,7 +228,7 @@ The direction contribution is scaled with the process magnitude Z<sup>&delta;</s
 
 ![persistence contribution P<sub>i</sub>](img/persistence.png)
 
-The direction contributions D<sub>n</sub> are defined by the cosine of the angle between parent, base and child/neighbor minus pi:  
+The direction contributions D<sub>n</sub> are defined by the cosine of the angle between parent, base and child/neighbor minus pi:
 
 ![direction contributions D<sub>n</sub>](img/persistence_cos_function.png)
 
@@ -243,7 +243,7 @@ The terrain based routing is solely dependent on the slope angle phi. The expone
 The Holmgren (1994) algorithm [1] is used in different kind of models and works well for avalanches but also rockfall or soil slides. For avalanches an exponent of 8 shows good results. To reach a single flow in step terrain (rockfall, soil slides, steepest descend), an exponent of 75 is considered.
 
 ![Holmgrem](img/flow_direction.png)
-*Holmgrem Algorithm from 1994 [1]*
+_Holmgrem Algorithm from 1994 [1]_
 
 To overcome the challenge of routing in flat or uphill terrain, we adapted the slope angle phi for the normalized terrain contribution to:
 
@@ -262,11 +262,11 @@ R<sub>b</sub> is the flux in the base, for a release cell or starting cell the f
 
 In Fig. 3 the algorithm of the computational implementation is sketched, including function and files names with respect to the code in the repository.
 
-The file main.py handles the input for the computation and splits the release layer in tiles and saves them in a release list. Then the main.py starts one process per tile, which calls the flow_core.py and starts the calculation for one release cell and the corresponding path. The number of processes is depending on the hardware setting (CPU and RAM).  Whenever a new cell is created flow_core.py calls flow_class.py and makes a new instance of this class, which is saved in the path. When the calculation in flow_core.py is finished it returns the path to main.py which saves the result to the output rasters.
+The file main.py handles the input for the computation and splits the release layer in tiles and saves them in a release list. Then the main.py starts one process per tile, which calls the flow_core.py and starts the calculation for one release cell and the corresponding path. The number of processes is depending on the hardware setting (CPU and RAM). Whenever a new cell is created flow_core.py calls flow_class.py and makes a new instance of this class, which is saved in the path. When the calculation in flow_core.py is finished it returns the path to main.py which saves the result to the output rasters.
 
 ![Flow_Chart](img/Flow-Py_chart.png)
 
-*Fig.3: Flow chart of the Flow-Py computational process and an overview of the files and what they manage.*
+_Fig.3: Flow chart of the Flow-Py computational process and an overview of the files and what they manage._
 
 ### References
 
@@ -286,7 +286,7 @@ Science, 13:869–885.
 Murgang-Simulationsprogramm zur Gefahrenzonierung. PhD thesis, Universität Bern.
 
 [4] [Huber, A., Fischer, J. T., Kofler, A., and Kleemayr, K. (2016).] Using spatially
-distributed statistical models for avalanche runout estimation. In International Snow Science Workshop, Breckenridge, Colorado, USA - 2016.  
+distributed statistical models for avalanche runout estimation. In International Snow Science Workshop, Breckenridge, Colorado, USA - 2016.
 
 ## Contact and acknowledgment
 

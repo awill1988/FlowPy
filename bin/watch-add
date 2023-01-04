@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
+# don't continue when there's an unexpected error or for undefined variables
+set -eu
 
-# helps to know where this script lives on the filesystem when it is run
+# to know where this script lives on the filesystem when it is run
 rootdir=$(cd "$(dirname "$0")/../"; pwd -P)
 
 # load helper bash functions
-source ${rootdir}/bin/rc
+source "${rootdir}/bin/rc"
 
 # make sure watchman is installed
 type watchman >/dev/null || die 'watchman is not installed. See https://facebook.github.io/watchman/docs/install.html'
-
-# don't continue when there's an unexpected error
-set -e
 
 #--------------------------------------------------------------------
 #                         watchman(add)

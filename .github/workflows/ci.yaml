@@ -1,0 +1,92 @@
+name: "FlowPy" # name of this github workflow
+run-name: > # name displayed on github
+  Continuous Integration for ${{ github.event.pull_request.title }} ${{ github.event.pull_request._links.html.href }}
+
+on: # yamllint disable-line rule:truthy
+  schedule:
+    - cron: "28 0 * * *"
+  push:
+    branches: ["develop", "master"]
+  pull_request:
+    branches: ["develop", "master"]
+
+# Permissions required are read, not write.
+permissions:
+  contents: read
+  pull-requests: read
+
+# System Environment variables that are inherited from Github
+env:
+  GITHUB_REPOSITORY: ${{ github.repository }} # this repository
+  GITHUB_USERNAME: ${{ github.actor }} # the username
+  IMAGE_TAG: "${{ github.event.pull_request.head.sha || github.sha }}" # the short sha
+
+# ensures only distinct runs per PR
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-info:
+    timeout-minutes: 10
+    name: "Build Info"
+    runs-on: "ubuntu-20.04"
+    env:
+      TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}
+    outputs:
+      runs-on: "ubuntu-20.04"
+      target-commit-sha:
+        "${{steps.discover-pr-merge-commit.outputs.target-commit-sha ||
+        github.event.pull_request.head.sha ||
+        github.sha
+        }}"
+    steps:
+      - name: Discover PR merge commit
+        id: discover-pr-merge-commit
+        run: |
+          TARGET_COMMIT_SHA="$(gh api '${{ github.event.pull_request.url }}' --jq .merge_commit_sha)"
+          echo "TARGET_COMMIT_SHA=$TARGET_COMMIT_SHA" >> ${GITHUB_ENV}
+          echo "target-commit-sha=${TARGET_COMMIT_SHA}" >> ${GITHUB_OUTPUT}
+        if: github.event_name == 'pull_request_target'
+      # The labels in the event aren't updated when re-triggering the job, So lets hit the API to get
+      # up-to-date values
+      - name: Get latest PR labels
+        id: get-latest-pr-labels
+        run: |
+          echo -n "pull-request-labels=" >> ${GITHUB_OUTPUT}
+          gh api graphql --paginate -F node_id=${{github.event.pull_request.node_id}} -f query='
+            query($node_id: ID!, $endCursor: String) {
+              node(id:$node_id) {
+                ... on PullRequest {
+                  labels(first: 100, after: $endCursor) {
+                    nodes { name }
+                    pageInfo { hasNextPage endCursor }
+                  }
+                }
+              }
+            }' --jq '.data.node.labels.nodes[]' | jq --slurp -c '[.[].name]' >> ${GITHUB_OUTPUT}
+        if: github.event_name == 'pull_request_target'
+
+  lint_code:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Run ShellCheck
+        uses: azohra/shell-linter@latest
+
+      - name: Run Hadolint (Dockerfile)
+        uses: hadolint/hadolint-action@v2.0.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: Lint Markdown
+        uses: avto-dev/markdown-lint@v1
+
+      - name: Lint JavaScript & YAML
+        uses: creyD/prettier_action@v4.2
+        with:
+          prettier_options: --check **/*.{js,y[a]ml}
+          only_changed: True

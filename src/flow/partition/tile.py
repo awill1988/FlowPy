@@ -6,7 +6,6 @@ from typing import Any, Tuple
 import numpy as np
 
 
-
 def create(
     fNameIn: str, fNameOut: str, dirName: str, xDim: np.number, yDim: np.number, U
 ):

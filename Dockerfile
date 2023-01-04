@@ -69,11 +69,11 @@ RUN \
     # install system dependencies
     #----------------------------------------------------------------------------------------------
     apt-get install -y --no-install-recommends \
-        "build-essential=${APT_BUILD_ESSENTIAL_VERSION}" \
-        "ca-certificates=${APT_CA_CERTIFICATES_VERSION}" \
-        "python3-pip=${APT_PYTHON3_PIP_VERSION}" \
-        "python3-pyqt5=${APT_PYTHON3_PYQT5_VERSION}" \
-        "python3-dev=${APT_PYTHON3_DEV_VERSION}" && \
+    "build-essential=${APT_BUILD_ESSENTIAL_VERSION}" \
+    "ca-certificates=${APT_CA_CERTIFICATES_VERSION}" \
+    "python3-pip=${APT_PYTHON3_PIP_VERSION}" \
+    "python3-pyqt5=${APT_PYTHON3_PYQT5_VERSION}" \
+    "python3-dev=${APT_PYTHON3_DEV_VERSION}" && \
     #----------------------------------------------------------------------------------------------
     # upgrade pip
     #----------------------------------------------------------------------------------------------

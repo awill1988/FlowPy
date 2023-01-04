@@ -1,0 +1,15 @@
+default: true
+
+# MD013/line-length - Line length
+MD013:
+  # Number of characters
+  line_length: 150
+
+# MD007/ul-indent - Unordered list indentation
+MD007:
+  # Spaces for indent
+  indent: 2
+  # Whether to indent the first level of the list
+  start_indented: false
+  # Spaces for first level indent (when start_indented is set)
+  start_indent: 2

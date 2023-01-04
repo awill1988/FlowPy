@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # don't continue when there's an unexpected error or for undefined variables
 set -eu
 
@@ -7,7 +6,7 @@ set -eu
 rootdir=$(cd "$(dirname "$0")/../"; pwd -P)
 
 # helper functions
-source ${rootdir}/bin/rc
+source "${rootdir}/bin/rc"
 
 # verify: watchman & jq are installed
 type jq >/dev/null || die 'jq is not installed. Please install it.'

@@ -1,0 +1,7 @@
+# ignore everything
+**/*
+
+# whitelist
+!*.js
+!*.yaml
+!*.md

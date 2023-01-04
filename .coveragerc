@@ -2,4 +2,4 @@
 source = src/flow
 
 [report]
-fail_under = 1
+fail_under = 15
