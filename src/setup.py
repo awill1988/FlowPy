@@ -25,7 +25,7 @@ if sys.version_info < (3, 10):
 from pathlib import Path  # noqa
 
 # Change this to what you want your library code to be called!
-PACKAGE_NAME = "flow"
+PACKAGE_NAME = "flowpy"
 
 # Path to the directory containing this file
 PYTHON_ROOT = Path(__file__).parent.absolute()
