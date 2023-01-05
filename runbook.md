@@ -21,34 +21,23 @@ docker run -it flowpy:develop gdal-config --version
 
 ## 1. GNU Make
 
-| Purpose                    | Subcommand          |
-| -------------------------- | ------------------- |
-| build release              | `make`              |
-| start airflow emulation    | `make airflow`      |
-| nuke everything            | `make clean`        |
-| build with host python env | `make build-python` |
+| Purpose                            | Subcommand   |
+| ---------------------------------- | ------------ |
+| build container & open shell       | `make shell` |
+| build with host machine python env | `make`       |
+| nuke host machine build files      | `make clean` |
 
 ## 2. Docker CLI
 
-| Purpose           | Command                                                                                      |
-| ----------------- | -------------------------------------------------------------------------------------------- |
-| airflow emulation | `docker build -t 'ates:with-airflow' --target=with-airflow .`                                |
-| shell             | `docker run -it ates:with-airflow bash`                                                      |
-| apt version pin   | `docker run -it debian:bullseye-slim bash -c 'apt update && apt-cache madison g++'`          |
-| lint docker       | `docker run --rm -i ghcr.io/hadolint/hadolint < Dockerfile`                                  |
-| lint docker size  | `docker run -it --rm -v $(pwd):/workdir dslim/docker-slim lint --target /workdir/Dockerfile` |
-| lint markdown     | `docker run -v $PWD:/workdir ghcr.io/igorshubovych/markdownlint-cli:latest "*.md"`           |
-
-## 3. Docker Compose
-
-| Purpose | Command                             |
-| ------- | ----------------------------------- |
-| builds  | `docker compose build develop`      |
-| shell   | `docker compose run -it shell bash` |
+| Purpose         | Command                                                                             |
+| --------------- | ----------------------------------------------------------------------------------- |
+| shell           | `docker run -it flowpy:develop bash` (requires previous build)                      |
+| lint dockerfile | `docker run --rm -i ghcr.io/hadolint/hadolint < Dockerfile`                         |
+| lint markdown   | `docker run -v $PWD:/workdir ghcr.io/igorshubovych/markdownlint-cli:latest "*.md"`  |
+| apt version pin | `docker run -it debian:bullseye-slim bash -c 'apt update && apt-cache madison g++'` |
 
 ## 4. Misc
 
-| Purpose                | Command                                     |
-| ---------------------- | ------------------------------------------- |
-| lints commit messages  | `pre-commit install --hook-type commit-msg` |
-| lint javascript / yaml | `prettier --check **/*.{js,y[a]ml}`         |
+| Purpose                | Command                             |
+| ---------------------- | ----------------------------------- |
+| lint javascript / yaml | `prettier --check **/*.{js,y[a]ml}` |

@@ -121,7 +121,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
+      max-parallel: 1
       matrix:
         include:
           - build-target: openssl
@@ -162,7 +163,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: build and push docker images
+      - name: build and push to github
         uses: docker/build-push-action@v3
         with:
           context: .
