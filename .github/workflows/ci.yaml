@@ -124,19 +124,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - build-target: openssl
-          - build-target: sqlite3
-          - build-target: libspatialite
-          - build-target: libgeotiff
-          - build-target: libwebp
-          - build-target: proj
-          - build-target: geos
+          # - build-target: openssl
+          # - build-target: sqlite3
+          # - build-target: libspatialite
+          # - build-target: libgeotiff
+          # - build-target: libwebp
+          # - build-target: proj
+          # - build-target: geos
           - build-target: minizip
-          - build-target: libxml2
-          - build-target: libspatialindex
-          - build-target: librttopo
-          - build-target: gdal
-          - build-target: develop
+          # - build-target: libxml2
+          # - build-target: libspatialindex
+          # - build-target: librttopo
+          # - build-target: gdal
+          # - build-target: develop
     steps:
       - name: fetch source
         uses: actions/checkout@v3
@@ -170,9 +170,10 @@ jobs:
           push: true
           labels: ${{ steps.meta.outputs.labels }}
           target: ${{ matrix.build-target }}
-          tags: awill1988/flowpy:${{ matrix.build-target }}
+          tags: ghcr.io/onxmaps/flowpy:${{ matrix.build-target }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
       -
         # Temp fix
         # https://github.com/docker/build-push-action/issues/252

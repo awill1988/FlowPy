@@ -1,14 +1,10 @@
-# EditorConfig helps developers define and maintain consistent
-# coding styles between different editors and IDEs
-# editorconfig.org
-
 root = true
 
 [*]
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
-insert_final_newline = true
+insert_final_newline = false
 indent_style = space
 indent_size = 4
 
@@ -17,8 +13,8 @@ indent_size = 4
 # denotes a line break in Markdown
 trim_trailing_whitespace = false
 
-[*.txt]
-insert_final_newline = false
+[*.py]
+insert_final_newline = true
 
 [*.y[a]ml]
 indent_size = 2
@@ -27,18 +23,5 @@ indent_size = 2
 indent_size = 2
 insert_final_newline = false
 
-[{Makefile,Makefile.*}]
-# Use tabs for indentation (Makefiles require tabs)
+[{Makefile,Makefile.*,*.mk}]
 indent_style = tab
-
-[*.geojson]
-insert_final_newline = false
-
-[*.wkt]
-insert_final_newline = false
-
-[*.gpx]
-insert_final_newline = false
-
-[*.json]
-insert_final_newline = false
