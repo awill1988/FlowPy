@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+    shell: # for running code
+        image: flowpy:develop
+        build:
+            target: shell
+        volumes:
+            - .:/usr/src:delegated
+    example: # from main.py
+        image: flowpy:develop
+        depends_on:
+            - shell
+        command: 
+        - python3
+        - /usr/src/main.py
+        - '25'
+        - '8'
+        - /usr/src/examples/dam
+        - /usr/src/examples/dam/dam_010m_standard_cr100_sw250_f2500.20.6_n0.asc
+        - /usr/src/examples/dam/release_dam.tif
