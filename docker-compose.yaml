@@ -16,6 +16,8 @@ services:
         - /usr/src/main.py
         - '25'
         - '8'
-        - /usr/src/examples/dam
+        - '/usr/src/examples/dam/'
         - /usr/src/examples/dam/dam_010m_standard_cr100_sw250_f2500.20.6_n0.asc
         - /usr/src/examples/dam/release_dam.tif
+        volumes:
+            - ./examples/dam:/usr/src/examples/dam:delegated
