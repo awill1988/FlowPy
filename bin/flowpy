@@ -7,10 +7,10 @@ CLI for Flow-Py
 from logging import getLogger as logger
 
 # cli
-from flow.args import cli
+from flowpy.args import cli
 
 # logging
-from flow.log import initialize
+from flowpy.log import initialize
 
 _logger = "flowpy.main"
 

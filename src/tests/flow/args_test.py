@@ -1,7 +1,7 @@
 """
 Args Tests.
 """
-from flow.args import cli
+from flowpy.args import cli
 from pytest import raises
 
 

@@ -1,0 +1,5 @@
+# https://www.shellcheck.net/wiki/Directive#external-sources
+external-sources=true
+
+# Suggest ${VAR} in place of $VAR
+enable=require-variable-braces

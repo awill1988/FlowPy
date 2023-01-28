@@ -13,7 +13,7 @@ from typing import Any, Tuple, List
 import numpy as np
 from datetime import datetime
 import logging
-from flow.cell import Cell
+from flowpy.cell import Cell
 
 logger = logging.getLogger("flow.core")
 

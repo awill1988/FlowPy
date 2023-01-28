@@ -1,7 +1,7 @@
 """
 Log Tests.
 """
-from flow.log import initialize
+from flowpy.log import initialize
 from logging import getLogger, RootLogger
 
 

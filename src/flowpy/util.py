@@ -6,7 +6,7 @@ from typing import Optional
 from weakref import ProxyType
 from rasterio import CRS
 from rasterio.io import DatasetReader
-from flow.memory import make_proxy
+from flowpy.memory import make_proxy
 
 ReadDataset = ProxyType[DatasetReader]
 

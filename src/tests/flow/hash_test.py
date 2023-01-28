@@ -1,7 +1,7 @@
 """
 Hash Tests.
 """
-from flow.hash import non_crypto_unsigned_int_hash
+from flowpy.hash import non_crypto_unsigned_int_hash
 
 
 def test_non_crypto_unsigned_int_hash():

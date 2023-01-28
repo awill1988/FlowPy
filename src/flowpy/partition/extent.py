@@ -1,7 +1,7 @@
 from os import PathLike
 import pickle
 from typing import Any, Tuple
-from flow.util import open_raster
+from flowpy.util import open_raster
 
 
 def dump_extent(src: PathLike, dst: PathLike) -> Tuple[Any, Any]:

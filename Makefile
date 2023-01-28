@@ -1,9 +1,7 @@
 include bin/python.mk
 include bin/tools.mk
 
-.DEFAULT_GOAL: shell
 .PHONY: shell
-
 shell: # starts a developer shell
 	@ docker build -t flowpy:develop --target=develop .
 	@ docker run \

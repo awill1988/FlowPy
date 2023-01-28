@@ -29,12 +29,13 @@ docker run -it flowpy:develop gdal-config --version
 
 ## 2. Docker CLI
 
-| Purpose         | Command                                                                             |
-| --------------- | ----------------------------------------------------------------------------------- |
-| shell           | `docker run -it flowpy:develop bash` (requires previous build)                      |
-| lint dockerfile | `docker run --rm -i ghcr.io/hadolint/hadolint < Dockerfile`                         |
-| lint markdown   | `docker run -v $PWD:/workdir ghcr.io/igorshubovych/markdownlint-cli:latest "*.md"`  |
-| apt version pin | `docker run -it debian:bullseye-slim bash -c 'apt update && apt-cache madison g++'` |
+| Purpose          | Command                                                                             |
+| ---------------- | ----------------------------------------------------------------------------------- |
+| shell            | `docker run -it flowpy:develop bash` (requires previous build)                      |
+| lint dockerfile  | `docker run --rm -i ghcr.io/hadolint/hadolint < Dockerfile`                         |
+| lint shell files | `docker run --rm -v "$PWD:/mnt" koalaman/shellcheck:stable myscript`                |
+| lint markdown    | `docker run -v $PWD:/workdir ghcr.io/igorshubovych/markdownlint-cli:latest "*.md"`  |
+| apt version pin  | `docker run -it debian:bullseye-slim bash -c 'apt update && apt-cache madison g++'` |
 
 ## 4. Misc
 

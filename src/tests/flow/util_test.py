@@ -8,7 +8,7 @@ from typing import Optional
 from weakref import ReferenceType
 from rasterio.io import DatasetReader, MemoryFile
 import rasterio
-from flow.memory import make_ref
+from flowpy.memory import make_ref
 
 
 def _test_raster(dim: int) -> MemoryFile:

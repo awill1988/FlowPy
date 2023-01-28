@@ -1,7 +1,7 @@
 """
 Settings Tests.
 """
-from flow.settings import LOGLEVEL
+from flowpy.settings import LOGLEVEL
 
 
 def test_settings():

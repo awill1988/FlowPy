@@ -140,7 +140,7 @@ setup(
     install_requires=parse_requirements("requirements/runtime.txt"),
     keywords=f"{PACKAGE_NAME}",
     package_dir={
-        PACKAGE_NAME: FROM_TOP / "flow",
+        PACKAGE_NAME: FROM_TOP / "flowpy",
     },
     package_data={PACKAGE_NAME: [str(FROM_TOP / "py.typed")]},
     include_package_data=True,

@@ -4,7 +4,7 @@ Memory Tests.
 
 import sys
 from weakref import getweakrefcount
-from flow.memory import try_gc, make_ref, make_proxy
+from flowpy.memory import try_gc, make_ref, make_proxy
 
 
 class ContrivedDoNothinger:

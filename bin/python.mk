@@ -44,6 +44,3 @@ test-python: build # Run all Python tests
 watch-add-python:
 	@ $(SHELL) bin/watch-add
 
-.PHONY: watch-del-python
-watch-del-python:
-	@ $(SHELL) bin/watch-del
